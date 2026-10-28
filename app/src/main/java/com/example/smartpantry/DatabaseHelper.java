@@ -219,20 +219,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static boolean canMakeRecipe(Recipe recipe, List<Ingredient> pantryItems) {
-        Map<String, Ingredient> pantryMap = new HashMap<>();
+        Map<String, Double> pantryTotals = new HashMap<>();
         for (Ingredient item : pantryItems) {
             if (item == null || item.getName() == null) continue;
-            pantryMap.put(normalizeIngredientName(item.getName()), item);
+            String key = normalizeIngredientName(item.getName());
+            pantryTotals.put(key, pantryTotals.getOrDefault(key, 0.0) + item.getQuantity());
         }
 
         for (RecipeIngredient required : recipe.getIngredients()) {
             String normalizedKey = normalizeIngredientName(required.getName());
-            Ingredient pantryItem = pantryMap.get(normalizedKey);
-            if (pantryItem == null) {
-                return false;
-            }
-
-            if (pantryItem.getQuantity() < required.getQuantity()) {
+            double pantryAmount = pantryTotals.getOrDefault(normalizedKey, 0.0);
+            if (pantryAmount < required.getQuantity()) {
                 return false;
             }
         }
@@ -244,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String value = ingredientName.toLowerCase(Locale.getDefault()).trim();
         value = value.replaceAll("[^a-z0-9\\s]", "");
         value = value.replaceAll("\\s+", " ");
+
         if (value.endsWith("ies") && value.length() > 4 && !value.endsWith("sses")) {
             value = value.substring(0, value.length() - 3) + "y";
         } else if (value.endsWith("es") && value.length() > 3 && !value.endsWith("ses") && !value.endsWith("xes") && !value.endsWith("zes") && !value.endsWith("ches") && !value.endsWith("shes")) {
@@ -251,6 +249,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else if (value.endsWith("s") && value.length() > 2 && !value.endsWith("ss")) {
             value = value.substring(0, value.length() - 1);
         }
+
+        value = value.replace("garlic cloves", "garlic");
+        value = value.replace("garlic clove", "garlic");
+        value = value.replace("spring onions", "spring onion");
+        value = value.replace("tomatoes", "tomato");
+        value = value.replace("peas", "pea");
+        value = value.replace("onions", "onion");
+        value = value.replace("carrots", "carrot");
+        value = value.replace("eggs", "egg");
+        value = value.replace("potatoes", "potato");
+        value = value.replace("strawberries", "strawberry");
+        value = value.replace("bananas", "banana");
+
         return value.trim();
     }
 }
