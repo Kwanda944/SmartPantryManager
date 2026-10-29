@@ -1,3 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SmartPantryManager</string>
+    <string name="app_name">Smart Pantry Manager</string>
+    <string name="pantry_title">My Pantry</string>
+    <string name="suggested_recipes_title">Suggested Recipes</string>
+    <string name="settings_title">Settings</string>
+    <string name="no_matches">No recipes match your pantry yet - add more ingredients</string>
+    <string name="recipe_detail_title">Recipe Details</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ingredient_name_hint">Ingredient name</string>
+    <string name="quantity_hint">Quantity</string>
+    <string name="expiry_hint">Expiry date (yyyy-MM-dd)</string>
+    <string name="unit_hint">Unit</string>
+    <string name="empty_pantry">Your pantry is empty. Add ingredients to start matching recipes.</string>
 </resources>
